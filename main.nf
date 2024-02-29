@@ -25,6 +25,7 @@ include { markDuplicates } from './modules/markDuplicates'
 include { indexBam } from './modules/indexBam'
 include { haplotypeCaller } from './modules/haplotypeCaller'
 include { filterVCF } from './modules/filterVCF'
+include { baseRecalibrator } from './modules/BQSR.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,6 +100,12 @@ workflow {
     // replaced params.genome_index_files with indexed_genome_ch
     // filterVCF(vcf_call_ch, params.genome_file, indexed_genome_ch)
     filterVCF(vcf_call_ch, indexed_genome_ch.collect())
+
+    // need to bring in known vcf files
+    knownsites_ch = Channel.fromPath(params.vcf_files)
+
+
+    baseRecalibrator (indexed_bam_ch, knownsites_ch.collect(), indexed_genome_ch.collect())
 }
 
 workflow.onComplete {

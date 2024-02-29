@@ -3,7 +3,7 @@
  */
 process alignReads {
 
-    label 'process_medium'
+    label 'process_low'
     container 'variantvalidator/indexgenome:1.1.0'
      
     tag "$sample_id"
