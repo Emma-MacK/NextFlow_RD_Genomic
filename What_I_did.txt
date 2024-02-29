@@ -1,0 +1,24 @@
+﻿What I did
+
+copied in BSQR.nf from pete’s repository
+downloaded 1 vcf.gz from those listed in the readme – indexed with gatk IndexFeatureFile. These were saved into a new folder – data/vcf/
+
+in nextflow config, added line:
+vcf_files = “$projectDir/data/vcf/*.{vcf.gz,vcf.gz.tbi} 
+so nextflow knows where to look for the vcf files
+
+in main.nf added include { baseRecalibrator } from ‘./modules/BQSR.nf’ so it finds the new module
+
+created a channel for truth vcfs, knownsites_ch = Channel.FromPath(params.vcf_files)
+run new module with
+baseRecalibrator (indexed_bam_ch, knownsites_ch.collect(), indexed_genome_ch.collect()
+
+.collect() here takes all elements from the channel as a list so we can get a vcf and its index, a genome and its index
+
+in BQSR.nf
+added input path indexFile
+add referenceVCF=\$(find -L -name `*.vcf.gz`) - this is a silly way to do things as we should be able to get it directly as a nextflow process input but hey ho pete did it this way
+mv *fasta.dict to *.dict so actually working
+ add gatk option –known-sites “\${referenceVCF}”\
+
+
