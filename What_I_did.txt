@@ -1,7 +1,6 @@
 ﻿What I did
 
-copied in BSQR.nf from pete’s repository
-downloaded 1 vcf.gz from those listed in the readme – indexed with gatk IndexFeatureFile. These were saved into a new folder – data/vcf/
+copied in BSQR.nf from pete’s repository 1000G_phase1.snps.high_confidence.hg38.vcf.gz from those listed in the Nextflow_RD_Genomic_QR readme – indexed with gatk IndexFeatureFile. These were saved into a new folder – data/vcf/
 
 in nextflow config, added line:
 vcf_files = “$projectDir/data/vcf/*.{vcf.gz,vcf.gz.tbi} 
